@@ -13,21 +13,24 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:users',
+            'password' => 'required|min:6|confirmed', // butuh password_confirmation
         ]);
 
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'name'     => $request->name,
+            'email'    => $request->email,
             'password' => bcrypt($request->password),
         ]);
 
+        $token = $user->createToken('auth_token')->plainTextToken;
+
         return response()->json([
-            'status' => true,
+            'status'  => true,
             'message' => 'Register Berhasil',
-            'data' => $user
+            'data'    => $user,
+            'token'   => $token
         ], 201);
     }
 
@@ -35,27 +38,28 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'email'    => 'required|email',
             'password' => 'required',
         ]);
 
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-
             return response()->json([
-                'status' => false,
+                'status'  => false,
                 'message' => 'Email atau Password salah'
             ], 401);
         }
 
+        // Hapus token lama, buat baru (opsional: bisa dihapus kalau mau multi device)
+        $user->tokens()->delete();
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'status' => true,
+            'status'  => true,
             'message' => 'Login Berhasil',
-            'data' => $user,
-            'token' => $token
+            'data'    => $user,
+            'token'   => $token
         ], 200);
     }
 
@@ -65,8 +69,49 @@ class AuthController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
-            'status' => true,
+            'status'  => true,
             'message' => 'Logout Berhasil'
         ], 200);
+    }
+
+    // GET PROFILE
+    public function profile(Request $request)
+    {
+        $user = $request->user();
+        $user->recipes_count = $user->recipes()->count();
+        $user->favorites_count = $user->favorites()->count();
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'Profil User',
+            'data'    => $user
+        ]);
+    }
+
+    // UPDATE PROFILE
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'name'         => 'sometimes|string|max:255',
+            'password'     => 'sometimes|min:6|confirmed',
+        ]);
+
+        $user = $request->user();
+
+        if ($request->name) {
+            $user->name = $request->name;
+        }
+
+        if ($request->password) {
+            $user->password = bcrypt($request->password);
+        }
+
+        $user->save();
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'Profil berhasil diupdate',
+            'data'    => $user
+        ]);
     }
 }
