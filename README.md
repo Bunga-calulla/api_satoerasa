@@ -94,6 +94,21 @@ Agar gambar-gambar resep/kategori yang diunggah dapat diakses oleh aplikasi Andr
 php artisan storage:link
 ```
 
+> [!WARNING]
+> ### 🖼️ Sinkronisasi Gambar Resep (Penting Untuk Kolaborasi Tim)
+> Karena folder `storage/app/public` (tempat menyimpan file gambar resep kustom) diabaikan oleh Git (`.gitignore`), foto resep kustom di PC Anda **tidak akan langsung ada** di PC rekan tim setelah mereka melakukan `git pull`. 
+>
+> Pilih **salah satu** solusi gampang berikut untuk menyinkronkannya:
+>
+> * **Solusi A: Kirim Folder Gambar (Direkomendasikan)**
+>   1. Di PC pembuat resep: Masuk ke folder `storage/app/public`, compress folder **`recipes`** menjadi file ZIP (misal: `recipes.zip`).
+>   2. Kirim berkas `recipes.zip` tersebut ke rekan tim Anda.
+>   3. Di PC rekan tim: Ekstrak folder `recipes` tadi ke dalam folder `storage/app/public` mereka.
+>   4. Jalankan `php artisan storage:link` di terminal backend mereka.
+> 
+> * **Solusi B: Gunakan URL Gambar Internet (Bebas Kirim File)**
+>   * Saat menambahkan resep baru (lewat database atau Admin panel), isi kolom gambar menggunakan **URL tautan langsung dari internet** (contoh: dari Unsplash atau Google Images) daripada mengunggah file lokal. Dengan begitu, gambar akan terunduh otomatis secara online di semua HP!
+
 #### Langkah H: Jalankan API Server lokal
 Mulai server backend Anda dengan port default:
 ```bash
