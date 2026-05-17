@@ -58,4 +58,19 @@ class Recipe extends Model
     {
         return $this->favorites()->count();
     }
+
+    // Accessor untuk gambar agar menggunakan route proxy API jika diload dari emulator/HP
+    public function getImageAttribute($value)
+    {
+        if (empty($value)) {
+            return null;
+        }
+
+        // Jika URL-nya mengandung '/storage/recipes/', ubah menjadi '/api/recipes/image/'
+        if (str_contains($value, '/storage/recipes/')) {
+            return str_replace('/storage/recipes/', '/api/recipes/image/', $value);
+        }
+
+        return $value;
+    }
 }

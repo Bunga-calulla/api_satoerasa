@@ -10,7 +10,9 @@ class CategoryController extends Controller
     // GET /api/categories — semua kategori
     public function index()
     {
-        $categories = Category::withCount('recipes')->get();
+        $categories = Category::withCount('recipes')
+            ->orderByRaw("CASE WHEN id = 6 THEN 1 WHEN id = 3 THEN 2 WHEN id = 2 THEN 3 WHEN id = 4 THEN 4 ELSE 99 END ASC")
+            ->get();
 
         return response()->json([
             'status'  => true,

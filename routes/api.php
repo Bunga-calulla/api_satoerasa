@@ -22,6 +22,7 @@ Route::get('/categories/{id}', [CategoryController::class, 'show']);
 
 // Resep (publik — bisa browse tanpa login)
 Route::get('/recipes',      [RecipeController::class, 'index']);
+Route::get('/recipes/image/{filename}', [RecipeController::class, 'serveImage']);
 Route::get('/recipes/{id}', [RecipeController::class, 'show']);
 
 // Rating (publik — bisa lihat rating tanpa login)

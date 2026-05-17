@@ -251,4 +251,30 @@ class RecipeController extends Controller
             'data'    => $recipes
         ]);
     }
+
+    // GET /api/recipes/image/{filename} — Serve image safely bypassing PHP WinSock Keep-Alive bug
+    public function serveImage($filename)
+    {
+        $path = storage_path('app/public/recipes/' . $filename);
+
+        if (!file_exists($path)) {
+            abort(404);
+        }
+
+        $type = mime_content_type($path);
+
+        // Bersihkan output buffer dari whitespace/extra bytes
+        if (ob_get_level() > 0) {
+            ob_end_clean();
+        }
+
+        // Kirim header langsung ke socket
+        header("Content-Type: " . $type);
+        header("Connection: close");
+        header("Content-Length: " . filesize($path));
+
+        // Stream langsung dan exit seketika
+        readfile($path);
+        exit;
+    }
 }
