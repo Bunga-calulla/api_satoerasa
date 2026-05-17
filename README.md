@@ -1,58 +1,155 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🍳 API SatoeRasa (Selera Nusantara Backend API)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+[![Laravel Version](https://img.shields.io/badge/laravel-%23FF2D20.svg?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)
+[![MySQL Version](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)](https://mysql.com)
+[![PHP Version](https://img.shields.io/badge/php-%23777BB4.svg?style=for-the-badge&logo=php&logoColor=white)](https://php.net)
 
-## About Laravel
+API RESTful modern berbasis **Laravel** yang dirancang khusus sebagai penyedia data dan engine backend untuk aplikasi Android **Selera Nusantara**. API ini menangani otentikasi pengguna, manajemen resep masakan, pengelolaan kategori, sinkronisasi resep favorit, hingga integrasi data dashboard admin secara real-time.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🌟 Fitur Utama API
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. **🔐 Authentication & User Management:** Registrasi, Login, dan Logout menggunakan Laravel Sanctum yang aman.
+2. **📖 Recipe RESTful API:** Pencarian resep secara cerdas, pembatasan resep populer, pencarian detail bahan (ingredients), serta langkah memasak (steps).
+3. **📂 Category Management:** Manajemen kategori makanan nusantara terpusat.
+4. **💖 Favorite Recipe Sync:** Penyimpanan resep favorit pengguna yang disinkronkan secara aman ke database server.
+5. **📊 Admin Dashboard Integration:** Penghitungan jumlah resep, jumlah kategori, dan manajemen CRUD resep langsung terhubung ke dashboard admin Android.
+6. **🌱 Database Auto-Seeder:** Pengisian otomatis database dengan resep-resep nusantara populer yang siap saji saat setup pertama kali.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🛠️ Spesifikasi Teknologi
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+* **Framework:** Laravel 10.x / 11.x
+* **Bahasa Pemrograman:** PHP >= 8.1
+* **Database:** MySQL / MariaDB (Direkomendasikan menggunakan **Laragon**)
+* **Otentikasi:** Laravel Sanctum (Token-based Auth)
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+---
 
-## Agentic Development
+## 🚀 Panduan Setup & Instalasi (Localhost)
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+Ikuti langkah-langkah di bawah ini untuk menjalankan API SatoeRasa di komputer Anda atau komputer rekan tim Anda:
 
+### 1. Prasyarat (Prerequisites)
+Pastikan Anda sudah menginstal alat-alat berikut di komputer Anda:
+* **Laragon** atau **XAMPP** (Web Server + MySQL)
+* **Composer** (PHP Dependency Manager)
+* **Git**
+
+---
+
+### 2. Langkah Demi Langkah Setup
+
+#### Langkah A: Pull / Clone & Install Dependensi
+Buka terminal di folder project `api_satoerasa` Anda, lalu jalankan perintah:
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+# Mengunduh library PHP yang diperlukan
+composer install
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+#### Langkah B: Duplikasi Konfigurasi Environment (`.env`)
+Salin berkas konfigurasi default `.env.example` menjadi `.env`:
+```bash
+# Di Windows Command Prompt / PowerShell:
+copy .env.example .env
 
-## Contributing
+# Di Linux / Mac / Git Bash:
+cp .env.example .env
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+#### Langkah C: Konfigurasi Database Lokal
+Buka berkas `.env` yang baru dibuat menggunakan text editor Anda, lalu sesuaikan bagian koneksi database:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=db_satoerasa
+DB_USERNAME=root
+DB_PASSWORD=             # Kosongkan jika menggunakan Laragon bawaan default
+```
 
-## Code of Conduct
+#### Langkah D: Generate Application Key
+Jalankan perintah ini untuk membuat kunci keamanan unik aplikasi Anda:
+```bash
+php artisan key:generate
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+#### Langkah E: Buat Database Baru
+1. Buka **Laragon** atau **XAMPP**, lalu pastikan service **MySQL** dan **Apache** dalam posisi **Start/Running**.
+2. Buka database manager (seperti **HeidiSQL** bawaan Laragon atau **phpMyAdmin**).
+3. Buat database baru bernama: **`db_satoerasa`**.
 
-## Security Vulnerabilities
+#### Langkah F: Jalankan Migrasi & Database Seeder 🌟
+Langkah krusial ini akan otomatis membuat semua struktur tabel database dan langsung mengisinya dengan data resep awal yang lengkap:
+```bash
+php artisan migrate --seed
+```
+*Catatan: Semua resep awal, kategori, serta akun admin pengujian otomatis masuk ke database lokal Anda setelah menjalankan perintah di atas.*
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+#### Langkah G: Hubungkan Storage Media (Sangat Penting!)
+Agar gambar-gambar resep/kategori yang diunggah dapat diakses oleh aplikasi Android, Anda harus menghubungkan folder penyimpanan lokal ke folder public:
+```bash
+php artisan storage:link
+```
 
-## License
+#### Langkah H: Jalankan API Server lokal
+Mulai server backend Anda dengan port default:
+```bash
+php artisan serve --host=0.0.0.0 --port=8000
+```
+> [!NOTE]
+> Menambahkan `--host=0.0.0.0` sangat penting agar API server Anda tidak hanya menerima koneksi dari PC lokal (localhost), melainkan juga dari perangkat HP Fisik yang terhubung di jaringan Wi-Fi yang sama!
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## 📲 Cara Menghubungkan Android App ke API
+
+Agar aplikasi Android **Selera Nusantara** dapat berkomunikasi dengan API lokal Anda, sesuaikan alamat IP pada kode Android:
+
+### A. Jika Menggunakan Emulator Android Studio:
+Cukup gunakan IP loopback khusus emulator Android Studio:
+* **Base URL:** `http://10.0.2.2:8000/api/`
+* Buka file `RetrofitClient.kt` di Android Studio, ubah baris URL menjadi:
+  ```kotlin
+  private const val BASE_URL = "http://10.0.2.2:8000/api/"
+  ```
+
+### B. Jika Menggunakan HP Fisik (Real Device):
+Jika Anda ingin menguji langsung di smartphone fisik Anda:
+1. Hubungkan HP fisik dan PC Anda ke **satu Wi-Fi / Hotspot yang sama**.
+2. Cari alamat IP local PC Anda. Buka CMD/Terminal PC Anda, lalu ketik `ipconfig`.
+3. Cari **IPv4 Address** (contoh: `192.168.1.15`).
+4. Buka file `RetrofitClient.kt` di Android Studio, lalu ubah URL menjadi IP PC Anda:
+  ```kotlin
+  private const val BASE_URL = "http://192.168.1.15:8000/api/" // Sesuaikan dengan IP komputer Anda!
+  ```
+5. Pastikan server Laravel di PC dijalankan dengan perintah: `php artisan serve --host=0.0.0.0 --port=8000`.
+6. Run aplikasi langsung ke HP fisik Anda!
+
+---
+
+## 🧹 Cheat-Sheet Perintah Berguna (Developer Tools)
+
+Jika terjadi eror atau Anda ingin mereset database ke kondisi awal pabrik:
+* **Reset & Seed Ulang Database:**
+  ```bash
+  php artisan migrate:fresh --seed
+  ```
+* **Melihat Daftar Route API yang Tersedia:**
+  ```bash
+  php artisan route:list --path=api
+  ```
+* **Membersihkan Cache Laravel:**
+  ```bash
+  php artisan optimize:clear
+  ```
+
+---
+
+## 👥 Kontributor & Tim Pengembang
+* **Frontend Android App:** Tim Selera Nusantara Android
+* **Backend API Engineer:** Tim SatoeRasa API
+
+*Selamat Memasak Kode! Semoga Sukses dengan Tugas Akhir PAS / Portofolio Anda! 🍳🔥*
