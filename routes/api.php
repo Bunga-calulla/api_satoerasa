@@ -43,6 +43,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/recipes/{id}',  [RecipeController::class, 'destroy']);
     Route::get('/my-recipes',       [RecipeController::class, 'myRecipes']);
 
+    // --- KATEGORI (Admin Only) ---
+    Route::post('/categories',         [CategoryController::class, 'store']);
+    Route::put('/categories/{id}',     [CategoryController::class, 'update']);
+    Route::delete('/categories/{id}',  [CategoryController::class, 'destroy']);
+
     // --- FAVORIT ---
     Route::get('/favorites',                        [FavoriteController::class, 'index']);
     Route::post('/favorites/{recipe_id}/toggle',    [FavoriteController::class, 'toggle']);

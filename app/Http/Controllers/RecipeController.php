@@ -73,10 +73,14 @@ class RecipeController extends Controller
     // POST /api/recipes — buat resep baru (butuh login)
     public function store(Request $request)
     {
+        if (!$request->user()->isAdmin()) {
+            return response()->json(['status' => false, 'message' => 'Hanya Admin yang bisa menambah resep'], 403);
+        }
         $request->validate([
             'category_id'   => 'required|exists:categories,id',
             'title'         => 'required|string|max:255',
             'description'   => 'nullable|string',
+            'video_url'     => 'nullable|url',
             'cooking_time'  => 'required|integer|min:1',
             'servings'      => 'required|integer|min:1',
             'difficulty'    => 'required|in:mudah,sedang,sulit',
@@ -102,6 +106,7 @@ class RecipeController extends Controller
             'category_id'  => $request->category_id,
             'title'        => $request->title,
             'description'  => $request->description,
+            'video_url'    => $request->video_url,
             'image'        => $imagePath,
             'cooking_time' => $request->cooking_time,
             'servings'     => $request->servings,
@@ -146,14 +151,15 @@ class RecipeController extends Controller
             return response()->json(['status' => false, 'message' => 'Resep tidak ditemukan'], 404);
         }
 
-        if ($recipe->user_id !== $request->user()->id) {
-            return response()->json(['status' => false, 'message' => 'Tidak boleh mengubah resep orang lain'], 403);
+        if (!$request->user()->isAdmin()) {
+            return response()->json(['status' => false, 'message' => 'Hanya Admin yang bisa mengubah resep'], 403);
         }
 
         $request->validate([
             'category_id'  => 'sometimes|exists:categories,id',
             'title'        => 'sometimes|string|max:255',
             'description'  => 'nullable|string',
+            'video_url'    => 'nullable|url',
             'cooking_time' => 'sometimes|integer|min:1',
             'servings'     => 'sometimes|integer|min:1',
             'difficulty'   => 'sometimes|in:mudah,sedang,sulit',
@@ -166,7 +172,7 @@ class RecipeController extends Controller
         }
 
         $recipe->update($request->only([
-            'category_id', 'title', 'description', 'cooking_time', 'servings', 'difficulty'
+            'category_id', 'title', 'description', 'video_url', 'cooking_time', 'servings', 'difficulty'
         ]));
 
         // Update ingredients jika dikirim
@@ -213,8 +219,8 @@ class RecipeController extends Controller
             return response()->json(['status' => false, 'message' => 'Resep tidak ditemukan'], 404);
         }
 
-        if ($recipe->user_id !== $request->user()->id) {
-            return response()->json(['status' => false, 'message' => 'Tidak boleh menghapus resep orang lain'], 403);
+        if (!$request->user()->isAdmin()) {
+            return response()->json(['status' => false, 'message' => 'Hanya Admin yang bisa menghapus resep'], 403);
         }
 
         $recipe->delete();

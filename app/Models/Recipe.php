@@ -8,7 +8,7 @@ class Recipe extends Model
 {
     protected $fillable = [
         'user_id', 'category_id', 'title', 'description',
-        'image', 'cooking_time', 'servings', 'difficulty'
+        'image', 'video_url', 'cooking_time', 'servings', 'difficulty'
     ];
 
     // Relasi ke user (yang buat resep)
